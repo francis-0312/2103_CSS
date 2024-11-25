@@ -2,7 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package pkg2103_css;
+package GUI;
+import MyConnection.MyConnection;
+import java.sql.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -10,12 +17,72 @@ package pkg2103_css;
  */
 public class viewbooking extends javax.swing.JFrame {
 
-    /**
-     * Creates new form viewbooking
-     */
-    public viewbooking() {
-        initComponents();
+  
+    private Connection connect;
+
+public viewbooking() {
+    initComponents();
+
+
+    MyConnection conn = new MyConnection();
+        connect = conn.getConnection();
+        initializeTable();
+        loadBookingDetails();
+       
+}
+
+private void initializeTable() {
+    DefaultTableModel model = new DefaultTableModel();
+    model.setColumnIdentifiers(new Object[]{
+        "BookingID", "ClientName", "ClientNumber", "EventLocation", 
+        "EventDate", "EventTime", "No. of Guests", "Event", 
+        "Package", "TotalPrice", "Status"
+    });
+
+    bTable.setModel(model);
+}
+
+private void loadBookingDetails() {
+    try {
+        if (connect == null) {
+            System.out.println("Database connection is not established!");
+            return;
+        }
+        PreparedStatement pst = connect.prepareStatement("SELECT * FROM bookingdetails");
+        ResultSet rs = pst.executeQuery();
+        ResultSetMetaData rss = rs.getMetaData();
+        int columnCount = rss.getColumnCount();
+
+        DefaultTableModel df = (DefaultTableModel) bTable.getModel();
+        df.setRowCount(0);
+
+        while (rs.next()) {
+            Vector<String> row = new Vector<>();
+            row.add(rs.getString("BookingID"));
+            row.add(rs.getString("ClientName"));
+            row.add(rs.getString("ClientNumber"));
+            row.add(rs.getString("EventLocation"));
+            row.add(rs.getString("EventDate"));
+            row.add(rs.getString("EventTime"));
+            row.add(rs.getString("NoOfGuests"));
+            row.add(rs.getString("Event"));
+            row.add(rs.getString("SelectedPackage"));
+            row.add(rs.getString("TotalPrice"));
+            row.add(rs.getString("Status"));
+
+            df.addRow(row);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
     }
+}
+
+
+
+  
+
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,122 +94,212 @@ public class viewbooking extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        bTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel1.setMaximumSize(new java.awt.Dimension(1010, 775));
+        jPanel1.setMinimumSize(new java.awt.Dimension(1010, 775));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1010, 775));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("BOOKING LIST");
+        jButton2.setBackground(new java.awt.Color(153, 153, 0));
+        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton2.setText("UPDATE");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 550, 110, 50));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel2.setFont(new java.awt.Font("Lucida Fax", 1, 36)); // NOI18N
+        jLabel2.setText("BOOKING LIST");
+        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 6, 280, 50));
+
+        bTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Booking ID", "Client Name", "Client Number", "Booking Date", "Booking Time", "No. of Guests", "Event", "Package", "Total Price", "Status"
+                "BookingID", "ClientName", "ClientNumber", "EventLocation", "EventDate", "EventTime", "No. of Guests", "Event", "Package", "TotalPrice", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-        });
-        jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setBackground(new java.awt.Color(0, 102, 102));
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(bTable);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 970, 470));
+
+        jButton1.setBackground(new java.awt.Color(0, 0, 0));
         jButton1.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Back");
-        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 710, 110, 44));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1043, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1030, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/images/download.jpeg"))); // NOI18N
+        jLabel1.setText("BOOKING LIST");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1012, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1032, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
        Front_Page fp1 = new Front_Page();
        fp1.show();
        
        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+     int selectedRow = bTable.getSelectedRow();
+    
+    if (selectedRow != -1) {
+        int bookingID = Integer.parseInt((String) bTable.getValueAt(selectedRow, 0));
+        String clientName = (String) bTable.getValueAt(selectedRow, 1);
+        String clientNumber = (String) bTable.getValueAt(selectedRow, 2);
+        String eventLocation = (String) bTable.getValueAt(selectedRow, 3);
+        String eventDate = (String) bTable.getValueAt(selectedRow, 4);
+        String eventTime = (String) bTable.getValueAt(selectedRow, 5);
+        String noOfGuests = (String) bTable.getValueAt(selectedRow, 6);
+        String event = (String) bTable.getValueAt(selectedRow, 7);
+        String selectedPackage = (String) bTable.getValueAt(selectedRow, 8);
+        String totalPrice = (String) bTable.getValueAt(selectedRow, 9);
+        String status = (String) bTable.getValueAt(selectedRow, 10);
+        
+        String newClientName = JOptionPane.showInputDialog(this, "Edit Client Name", clientName);
+        String newClientNumber = JOptionPane.showInputDialog(this, "Edit Client Number", clientNumber);
+        String newEventLocation = JOptionPane.showInputDialog(this, "Edit Event Location", eventLocation);
+        String newEventDate = JOptionPane.showInputDialog(this, "Edit Event Date", eventDate);
+        String newEventTime = JOptionPane.showInputDialog(this, "Edit Event Time", eventTime);
+        String newNoOfGuests = JOptionPane.showInputDialog(this, "Edit Number of Guests", noOfGuests);
+        String newEvent = JOptionPane.showInputDialog(this, "Edit Event", event);
+        String newSelectedPackage = JOptionPane.showInputDialog(this, "Edit Selected Package", selectedPackage);
+        String newTotalPrice = JOptionPane.showInputDialog(this, "Edit Total Price", totalPrice);
+        String newStatus = JOptionPane.showInputDialog(this, "Edit Status", status);
+
+        if (newClientName != null && !newClientName.isEmpty()) {
+            bTable.setValueAt(newClientName, selectedRow, 1);
+        }
+        if (newClientNumber != null && !newClientNumber.isEmpty()) {
+            bTable.setValueAt(newClientNumber, selectedRow, 2);
+        }
+        if (newEventLocation != null && !newEventLocation.isEmpty()) {
+            bTable.setValueAt(newEventLocation, selectedRow, 3);
+        }
+        if (newEventDate != null && !newEventDate.isEmpty()) {
+            bTable.setValueAt(newEventDate, selectedRow, 4);
+        }
+        if (newEventTime != null && !newEventTime.isEmpty()) {
+            bTable.setValueAt(newEventTime, selectedRow, 5);
+        }
+        if (newNoOfGuests != null && !newNoOfGuests.isEmpty()) {
+            bTable.setValueAt(newNoOfGuests, selectedRow, 6);
+        }
+        if (newEvent != null && !newEvent.isEmpty()) {
+            bTable.setValueAt(newEvent, selectedRow, 7);
+        }
+        if (newSelectedPackage != null && !newSelectedPackage.isEmpty()) {
+            bTable.setValueAt(newSelectedPackage, selectedRow, 8);
+        }
+        if (newTotalPrice != null && !newTotalPrice.isEmpty()) {
+            bTable.setValueAt(newTotalPrice, selectedRow, 9);
+        }
+        if (newStatus != null && !newStatus.isEmpty()) {
+            bTable.setValueAt(newStatus, selectedRow, 10);
+        }
+
+        try (PreparedStatement stmt = connect.prepareStatement(
+            "UPDATE bookingdetails SET clientName = ?, clientNumber = ?, eventLocation = ?, " +
+            "eventDate = ?, eventTime = ?, noOfGuests = ?, event = ?, selectedPackage = ?, " +
+            "totalPrice = ?, status = ? WHERE bookingID = ?")) {
+
+            stmt.setString(1, newClientName);
+            stmt.setString(2, newClientNumber);
+            stmt.setString(3, newEventLocation);
+            stmt.setString(4, newEventDate);
+            stmt.setString(5, newEventTime);
+            stmt.setString(6, newNoOfGuests);
+            stmt.setString(7, newEvent);
+            stmt.setString(8, newSelectedPackage);
+            stmt.setString(9, newTotalPrice);
+            stmt.setString(10, newStatus);
+            stmt.setInt(11, bookingID);
+            
+            int rowsAffected = stmt.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(this, "Booking updated successfully.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error updating booking.");
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage());
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Please select a booking to update.");
+    }
+
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,10 +337,12 @@ public class viewbooking extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable bTable;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
